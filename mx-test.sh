@@ -8856,6 +8856,8 @@ t_compose_hooks() { # {{{ TODO monster
          digmsg - header show mailx-orig-tO;\
          digmsg - header show mailx-orig-Cc;\
          digmsg - header show mailx-oriG-bcc;\
+         digmsg - header show maIlx-editeD-SENDER;\
+         digmsg - header show maIlx-editeD-origiN;\
          digmsg remove -;echo $?/$!/$^ERRNAME
       digmsg create -;echo $?/$!/$^ERRNAME;\
          digmsg - header list;readall x;echon $x;\
@@ -8882,6 +8884,8 @@ t_compose_hooks() { # {{{ TODO monster
          digmsg - header show mailx-orig-tO;\
          digmsg - header show mailx-orig-Cc;\
          digmsg - header show mailx-oriG-bcc;\
+         digmsg - header show maIlx-editeD-SENDER;\
+         digmsg - header show maIlx-editeD-origiN;\
          digmsg remove -;echo $?/$!/$^ERRNAME
       digmsg create -;echo $?/$!/$^ERRNAME;\
          digmsg - header list;readall x;echon $x;\
@@ -8906,6 +8910,8 @@ t_compose_hooks() { # {{{ TODO monster
          digmsg - header show mailx-orig-tO;\
          digmsg - header show mailx-orig-Cc;\
          digmsg - header show mailx-oriG-bcc;\
+         digmsg - header show maIlx-editeD-SENDER;\
+         digmsg - header show maIlx-editeD-origiN;\
          digmsg remove -;echo $?/$!/$^ERRNAME
       # ditto digmsg create -;echo $?/$!/$^ERRNAME;\
          digmsg - header list;readall x;echon $x;\
@@ -9075,6 +9081,8 @@ __EOT__
                digmsg - header show mailx-orig-tO;\
                digmsg - header show mailx-orig-Cc;\
                digmsg - header show mailx-oriG-bcc;\
+               digmsg - header show maIlx-editeD-SENDER;\
+               digmsg - header show maIlx-editeD-origiN;\
                digmsg remove -;echo $?/$!/$^ERRNAME
          }
          define t_ocl {
@@ -9098,6 +9106,8 @@ __EOT__
                digmsg - header show mailx-orig-tO;\
                digmsg - header show mailx-orig-Cc;\
                digmsg - header show mailx-oriG-bcc;\
+               digmsg - header show maIlx-editeD-SENDER;\
+               digmsg - header show maIlx-editeD-origiN;\
                digmsg remove -;echo $?/$!/$^ERRNAME
          }
          define t_occ {
@@ -9120,6 +9130,8 @@ __EOT__
                digmsg - header show mailx-orig-tO;\
                digmsg - header show mailx-orig-Cc;\
                digmsg - header show mailx-oriG-bcc;\
+               digmsg - header show maIlx-editeD-SENDER;\
+               digmsg - header show maIlx-editeD-origiN;\
                digmsg remove -;echo $?/$!/$^ERRNAME
          }
          set on-compose-splice=t_ocs \
@@ -9237,6 +9249,8 @@ this is content of forward 2, 2nd, with showname set
                digmsg - header show mailx-orig-tO;\
                digmsg - header show mailx-orig-Cc;\
                digmsg - header show mailx-oriG-bcc;\
+               digmsg - header show maIlx-editeD-SENDER;\
+               digmsg - header show maIlx-editeD-origiN;\
                digmsg remove -;echo $?/$!/$^ERRNAME
          }
          define t_ocl {
@@ -9257,6 +9271,8 @@ this is content of forward 2, 2nd, with showname set
                digmsg - header show mailx-orig-tO;\
                digmsg - header show mailx-orig-Cc;\
                digmsg - header show mailx-oriG-bcc;\
+               digmsg - header show maIlx-editeD-SENDER;\
+               digmsg - header show maIlx-editeD-origiN;\
                digmsg remove -;echo $?/$!/$^ERRNAME
          }
          define t_occ {
@@ -9277,6 +9293,8 @@ this is content of forward 2, 2nd, with showname set
                digmsg - header show mailx-orig-tO;\
                digmsg - header show mailx-orig-Cc;\
                digmsg - header show mailx-oriG-bcc;\
+               digmsg - header show maIlx-editeD-SENDER;\
+               digmsg - header show maIlx-editeD-origiN;\
                digmsg remove -;echo $?/$!/$^ERRNAME
          }
          define t_oce_r { # XXX use normal callbacks
@@ -9522,11 +9540,11 @@ t_lreply_futh_rth_etc() { # {{{
 	From tom@i-i.example Thu Oct 26 03:15:55 2017
 	Date: Wed, 25 Oct 2017 21:15:46 -0400
 	From: tom <tom@i-i.example>
-	To: Steffen Nurpmeso <steffen@sdaoden.eu>
+	To: i was to <i@was.to>
 	Cc: tom <tom@i-i.example>
 	Subject: Re: xxxx yyyyyyyy configure does not really like a missing zzzzz
 	Message-ID: <20171026011546.GA11643@i-i.example>
-	Reply-To: tom@i-i.example
+	Reply-To: tom@reply-to.example
 	References: <20171025214601.T2pNd%steffen@sdaoden.eu>
 	In-Reply-To: <20171025214601.T2pNd%steffen@sdaoden.eu>
 	Status: R
@@ -9541,27 +9559,27 @@ t_lreply_futh_rth_etc() { # {{{
    printf 'reply 1\nthread\n!.\n' |
       ${MAILX} ${ARGS} -Sescape=! -Smta=test://t2_11 -Sreply-to-honour \
          ${argadd} -Rf ./t.mbox > ./t3 2>&1
-   check 2 0 ./t2_11 '2966409435 480'
+   check 2 0 ./t2_11 '1947573462 438'
    check 3 - ./t3 '4294967295 0'
 
    printf 'reply 1\nnew <- thread!\n!||%s -e "%s"\n!.\n' \
          "${sed}" '/^In-Reply-To:/d' |
       ${MAILX} ${ARGS} -Sescape=! -Smta=test://t2_11 -Sreply-to-honour \
          ${argadd} -Rf ./t2_11 > ./t5 2>&1
-   check 4 0 ./t2_11 '3870393639 865'
+   check 4 0 ./t2_11 '3135163949 781'
    check 5 - ./t5 '4294967295 0'
 
    printf 'reply 2\nold <- new <- thread!\n!.\n' |
       ${MAILX} ${ARGS} -Sescape=! -Smta=test://t2_11 -Sreply-to-honour \
          ${argadd} -Rf ./t2_11 > ./t7 2>&1
-   check 6 0 ./t2_11 '219545266 1372'
+   check 6 0 ./t2_11 '3951858303 1246'
    check 7 - ./t7 '4294967295 0'
 
    printf 'reply 3\nnew <- old <- new <- thread!\n!|| %s -e "%s"\n!.\n' \
          "${sed}" '/^In-Reply-To:/d' |
       ${MAILX} ${ARGS} -Sescape=! -Smta=test://t2_11 -Sreply-to-honour \
          ${argadd} -Rf ./t2_11 > ./t9 2>&1
-   check 8 0 ./t2_11 '529088127 1771'
+   check 8 0 ./t2_11 '440094854 1603'
    check 9 - ./t9 '4294967295 0'
 
    # And follow-up testing whether changing In-Reply-To: to - starts a new
@@ -9571,7 +9589,7 @@ t_lreply_futh_rth_etc() { # {{{
          "${sed}" 's/^In-Reply-To:.*$/In-Reply-To:-/' |
       ${MAILX} ${ARGS} -Sescape=! -Smta=test://t2_11 -Sreply-to-honour \
          ${argadd} -Rf ./t2_11 > ./t11 2>&1
-   check 10 0 ./t2_11 '968429240 2282'
+   check 10 0 ./t2_11 '1454549899 2072'
    check 11 - ./t11 '4294967295 0'
 
    t_epilog "${@}"
