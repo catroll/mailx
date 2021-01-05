@@ -241,7 +241,7 @@ retain date author sender from to cc subject \
 #\endif
 
 ## }}}
-## Example configurations (on top of defaults above) {{{
+## Example configurations {{{
 
 ## Request strict TLS transport layer security checks
 #\set tls-verify=strict
