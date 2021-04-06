@@ -3427,10 +3427,9 @@ which is a programming language with syntactic elements of clearly
 defined semantics, and therefore capable to sequentially expand and
 evaluate individual elements of a line.
 .Ql \&? set one=value two=$one
-for example will never possibly assign value to one, because the
-variable assignment is performed no sooner but by the command
-.Pf ( Ic set ) ,
-long after the expansion happened.
+for example will never assign a value to two, because it is the command
+.Pf ( Ic set )
+that performs the assignment \(en long after the expansion happened.
 .
 .Pp
 A list of all commands in lookup order is dumped by the command
@@ -5094,6 +5093,8 @@ macro(s), including self-deletion.
 Without arguments the former command prints the current list of macros,
 including their content, otherwise it defines a macro, replacing an
 existing one of the same name as applicable.
+Macro names are free-form but need to be a single token (see
+.Sx "Shell-style argument quoting" ) .
 .
 .Pp
 A defined macro can be invoked explicitly by using the
@@ -5967,7 +5968,7 @@ This mode is selected with (a case-insensitive prefix of) the
 .Dq context names
 .Cm create , remove , assign , join ;
 the real name is given next, it is case-insensitive, must not shadow
-a builtin name, and has to adhere to
+a built-in name, and has to adhere to
 .Mx -sx
 .Sx "variable name rules" .
 Trying to create a context a second time is an error.
@@ -7961,35 +7962,31 @@ ged message.
 .\" .Sh COMMAND ESCAPES {{{
 .Sh "COMMAND ESCAPES"
 .
-Command escapes are available in
-.Sx "Compose mode"
-during interactive usage, when explicitly requested via
+Command escapes are available in interactive
+.Sx "Compose mode" ,
+when requested via
 .Fl ~ ,
-and in batch mode
+as well as in batch mode
 .Pf ( Fl # ) .
-They perform special functions, like editing headers of the message
-being composed, calling normal
+Escapes offer access to functions like header editing, invocation of
 .Sx COMMANDS ,
-yielding a shell, etc.
-Command escapes are only recognized at the beginning of lines, and
-consist of an escape followed by a command character.
-The default
-.Va escape
-character is the tilde
-.Ql ~ .
-.
-.Pp
-Unless otherwise documented command escapes ensure proper updates of
-the error number
+management of attachments, etc.
+They are only recognized at the beginning of lines, and consist of an
+escape character, optional modifier characters, and a command character.
+Interspersed whitespace is ignored.
+Unless otherwise documented the error number
 .Va \&!
 and the exit/return status
-.Va \&? .
-The variable
+.Va \&?
+is properly managed, and so
 .Va errexit
-controls whether a failed operation errors out message compose mode and
-causes program exit.
-Escapes may be prefixed by none to multiple single character command
-modifiers, interspersed whitespace is ignored:
+may cause leaving compose mode and program exits.
+By default tilde
+.Ql ~
+is the
+.Va escape
+character, and the optional modifier characters are:
+.
 .
 .Bl -bullet
 .It
@@ -7999,6 +7996,16 @@ can be achieved with hyphen-minus
 .Ql - ,
 overriding
 .Va errexit .
+.Bd -literal -offset indent
+? set errexit; reply .
+~ - : illegal
+\*(uA: illegal: unknown command
+~:illegal
+\*(uA: illegal: unknown command
+\*(uA: Failed to prepare composed message
+$
+.Ed
+.
 .It
 The modifier dollar
 .Ql $
@@ -8009,7 +8016,15 @@ uates the remains of the line as often as it is used; also see
 that control operators like semicolon
 .Cm \&;
 are interpreted unintentionally, they must be quoted.
+.Bd -literal -offset indent
+? set var='bla bla bla'; reply .
+~:echo '$var'
+$var
+~$:echo '$var'
+bla bla bla
+.Ed
 .El
+.
 .
 .Pp
 Addition of the command line to the \*(OPal history can be prevented by
@@ -8046,7 +8061,7 @@ The hooks
 .Va on-compose-splice-shell
 and
 .Va on-compose-splice ,
-in order, will be called when set, after which, in interactive mode
+in order, will be called when set, after which, in interactive mode,
 .Va askatend
 (leading to
 .Va askcc , askbcc )
@@ -8063,7 +8078,7 @@ and
 will be joined in if set,
 finally a given
 .Va message-inject-tail
-will be incorporated, after which the compose mode is left.
+will be incorporated, after which compose mode is left.
 .
 .Mx
 .It Ic ~: Ar \*(UA-command Ns \0or Ic ~_ Ar \*(UA-command
@@ -13890,7 +13905,7 @@ The data sink
 .\" .Ss "Resource files" {{{
 .Ss "Resource files"
 .
-Upon startup \*(UA reads in several resource files, in order:
+Upon startup several resource files are read, in order:
 .
 .Bl -tag -width ".It Pa BaNg"
 .Mx
