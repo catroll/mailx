@@ -333,7 +333,7 @@ c_shell(void *vp){
          cc.cc_fds[mx_CHILD_FD_OUT] = fileno(fp);
       mx_child_ctx_set_args_for_sh(&cc, NIL, a_cmisc_bangexp(*argv));
 
-      if(!mx_child_run(&cc) || (rv = cc.cc_exit_status) < 0){
+      if(!mx_child_run(&cc) || (rv = cc.cc_exit_status) < su_EX_OK){
          n_pstate_err_no = cc.cc_error;
          rv = -1;
       }
@@ -390,7 +390,7 @@ c_dosh(void *vp){
    cc.cc_flags = mx_CHILD_RUN_WAIT_LIFE;
    cc.cc_cmd = ok_vlook(SHELL);
 
-   if(mx_child_run(&cc) && (rv = cc.cc_exit_status) >= 0){
+   if(mx_child_run(&cc) && (rv = cc.cc_exit_status) >= su_EX_OK){
       putc('\n', n_stdout);
       /* Line buffered fflush(n_stdout); */
       n_pstate_err_no = su_ERR_NONE;
@@ -444,7 +444,7 @@ c_cwd(void *vp){
    }
 
    NYD_OU;
-   return (vp == NIL ? n_EXIT_ERR : n_EXIT_OK);
+   return (vp == NIL ? su_EX_ERR : su_EX_OK);
 }
 
 int
@@ -466,7 +466,7 @@ c_chdir(void *vp){
 
 jleave:
    NYD_OU;
-   return (cp == NIL ? n_EXIT_ERR : n_EXIT_OK);
+   return (cp == NIL ? su_EX_ERR : su_EX_OK);
 }
 
 int
