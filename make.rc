@@ -472,7 +472,7 @@ OPT_NOEXTMD5=no
 # If $OPT_DEVEL is true we will use a simple memory wrapper with
 # canaries.  This interferes with memory debuggers like valgrind(1) or
 # the LLVM -fsanitize stuff.  Enable this to not use our wrapper.
-OPT_NOMEMDBG=`\
+OPT_EXTERNAL_MEM_CHECK=`\
    if feat_yes ASAN_MEMORY || feat_yes ASAN_ADDRESS; then \
       echo yes;\
    else \
