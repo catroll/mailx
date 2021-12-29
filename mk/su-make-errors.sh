@@ -143,6 +143,9 @@ compile_time() { # {{{
       exit 1
    }
    set -e
+   pipefail=
+   ( set -o pipefail ) >/dev/null 2>&1 && pipefail=y
+   [ -n "${pipefail}" ] && set -o pipefail
 
    {
       printf '#include <errno.h>\nsu_ERROR_START\n'
