@@ -722,13 +722,13 @@ main(int argc, char *argv[]){
       "enable-cmd-escapes;~;" N_("even in non-interactive compose mode"),
       "batch-mode;#;" N_("more confined non-interactive setup"),
       "end-options;.;" N_("force the end of options, and (enter) send mode"),
-      "long-help;\201;" N_("this listing"),
+      "long-help;-1;" N_("this listing"),
       NIL
    };
 
    struct a_main_ctx mc;
    struct su_avopt avo;
-   int i;
+   s32 i;
    char const *emsg;
    char *cp;
    BITENUM_IS(u32,a_rf_ids) resfiles;
@@ -749,6 +749,7 @@ main(int argc, char *argv[]){
     * XXX with/out -f, then use an according option array.  This would ease
     * XXX the interdependency checking necessities! */
    su_avopt_setup(&avo, --argc, C(char const*const*,++argv), a_sopts, a_lopts);
+
    while((i = su_avopt_parse(&avo)) != su_AVOPT_STATE_DONE){
       switch(i){
       case 'A':
@@ -832,9 +833,9 @@ main(int argc, char *argv[]){
          n_psonce &= ~n_PSO_INTERACTIVE;
          break;
       case 'h':
-      case S(char,S(u8,'\201')):
+      case -1:
          a_main_usage(n_stdout);
-         if(i != 'h'){
+         if(i < 0){
             fprintf(n_stdout, "\nLong options:\n");
             (void)su_avopt_dump_doc(&avo, &a_main_dump_doc, S(up,n_stdout));
          }
